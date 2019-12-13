@@ -25,13 +25,14 @@ module FSM(clk, reset, coin, drink_choose, change, total_coin);
     // next state logic
     always@(*)
         case (curr_state)
-            S0:
+            S0: begin
 			    total_coin <= total_coin + coin; // 投錢
                 // $display("%d", total_coin) ??
                 if (total_coin >= 10) // 高於最低金額
                     next_state = S1;  // 進入S1
                 else                  // 金額不足
                     next_state = S0;  // 繼續投錢
+			end // S0 end
         endcase
-    
+	
 endmodule
