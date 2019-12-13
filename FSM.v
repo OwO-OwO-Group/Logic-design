@@ -16,8 +16,8 @@ module FSM(clk, reset, coin, drink_choose, change, total_coin);
     parameter S3 = 2'b11; // change
     
     // state register
-    always@(posedge clk or negedge reset) 
-        if (~reset) curr_state <= S0;         // 1 -> 0 進入state S0
+    always@(posedge clk) 
+        if (reset)  curr_state <= S0;         
         else        curr_state <= next_state; 
     
 endmodule
