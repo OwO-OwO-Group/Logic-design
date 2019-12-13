@@ -17,7 +17,20 @@ module FSM(clk, reset, coin, drink_choose, change, total_coin);
     
     // state register
     always@(posedge clk) 
-        if (reset)  curr_state <= S0;         
-        else        curr_state <= next_state; 
+        if (reset)  
+            curr_state <= S0; 
+        else      
+            curr_state <= next_state; 
+    
+    // next state logic
+    always@(*)
+        case (curr_state)
+            S0:
+                // $display("%d", total_coin) ??
+                if (total_coin >= 10) // 高於最低金額
+                    next_state = S1;  // 進入S1
+                else                  // 金額不足
+                    next_state = S0;  // 繼續投錢
+        endcase
     
 endmodule
