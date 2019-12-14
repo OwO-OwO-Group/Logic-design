@@ -3,7 +3,9 @@ module FSM(clk, reset, coin, drink_choose, change, total_coin);
     // coin 投入的零錢, drink_choose 輸入要選擇的飲料
     // change 找零, total_coin 顯示目前總共投入多少零錢
     
-    input clk, reset, coin, drink_choose;
+    input clk, reset;
+	input [31:0] coin;
+	input [1:0] drink_choose;
     output change, total_coin;
     
     reg total_coin, change;
@@ -26,13 +28,17 @@ module FSM(clk, reset, coin, drink_choose, change, total_coin);
     always@(*)
         case (curr_state)
             S0: begin
-			    total_coin <= total_coin + coin; // 投錢
+                total_coin <= total_coin + coin; // 投錢
                 // $display("%d", total_coin) ??
                 if (total_coin >= 10) // 高於最低金額
                     next_state = S1;  // 進入S1
                 else                  // 金額不足
                     next_state = S0;  // 繼續投錢
-			end // S0 end
+            end // S0 end
+            
+            S1: begin
+                
+            end // S1 end
         endcase
-	
+    
 endmodule
