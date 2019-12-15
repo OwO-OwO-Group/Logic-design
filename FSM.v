@@ -1,16 +1,16 @@
 `timescale 1ns/1ns
-module FSM(clk, reset, coin, drink_choose, change, total_coin);
+module FSM(clk, reset, coin, drink_choose, change, total_coin, cancel);
     // coin 投入的零錢, drink_choose 輸入要選擇的飲料
     // change 找零, total_coin 顯示目前總共投入多少零錢
     
-    input clk, reset;
+    input clk, reset, cancel;
     input [31:0] coin;
-    input [1:0] drink_choose;
+    input [2:0] drink_choose;
     output [31:0] change, total_coin;
     
     reg [31:0] total_coin, change;
-    reg [1:0] curr_state, next_state;
-    reg [1:0] drink_pass; // 把選擇傳到下一個state
+    reg [1:0] state;
+    reg [2:0] drink_pass; // 把選擇傳到下一個state
 
     parameter S0 = 2'b00; // input coin
     parameter S1 = 2'b01; // $display drink that you can buy
@@ -18,49 +18,52 @@ module FSM(clk, reset, coin, drink_choose, change, total_coin);
     parameter S3 = 2'b11; // change
     
     // drink
-    parameter tea = 2'b00;
-    parameter coke = 2'b01;
-    parameter coffee = 2'b10;
-    parameter milk = 2'b11;
+    parameter no_choose = 3'b000;
+    parameter tea = 3'b001;
+    parameter coke = 3'b010;
+    parameter coffee = 3'b011;
+    parameter milk = 3'b100;
     
     // state register
-    always@(posedge clk) 
-        if (reset)  
-            curr_state <= S0; 
-        else      
-            curr_state <= next_state; 
-    
+    always @(posedge reset) begin
+        if (reset) begin
+            state <= S0;
+            total_coin <= 0;
+            change <= 0;
+        end
+    end
+
     // next state logic
-    always@(*)
-        case (curr_state)
+    always @(clk or coin or drink_choose)
+        case (state)
             S0: begin
-                total_coin <= total_coin + coin; // 投錢
-                // $display("%d", total_coin) ??
+                if (clk == 0)
+                    total_coin = total_coin + coin; // 投錢
+                $display("money : %d", total_coin); // 顯示目前金額
                 if (total_coin >= 10) // 高於最低金額
-                    next_state = S1;  // 進入S1
+                    state <= S1;  // 進入S1
                 else                  // 金額不足
-                    next_state = S0;  // 繼續投錢
+                    state <= S0;  // 繼續投錢
             end // S0 end
             
             S1: begin
-                $display("money : %d\n", total_coin); // 顯示目前金額
                 // 顯示目前能買那些    
-                if (total_coin >= 10)
-                    $display("tea\n");
-                else if (total_coin >= 15)
-                    $display("tea, coke\n");
+                if (total_coin >= 25)
+                    $display("tea, coke, coffee, milk");
                 else if (total_coin >= 20)
-                    $display("tea, coke, coffee\n");
-                else if (total_coin >= 25)
-                    $display("tea, coke, coffee, milk\n");
+                    $display("tea, coke, coffee");
+                else if (total_coin >= 15)
+                    $display("tea, coke");
+                else if (total_coin >= 10)
+                    $display("tea");
                     
                 // 選擇drink or 繼續投錢
-                if (coin != 0) begin
+                if (coin == 0 && drink_choose != no_choose) begin
                     drink_pass <= drink_choose;
-                    next_state = S2; // 給飲料
+                    state <= S2; // 給飲料
                 end  // if end
                 else // 繼續投錢
-                    next_state = S0;
+                    state <= S0;
             end // S1 end
         endcase
     
