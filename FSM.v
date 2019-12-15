@@ -55,7 +55,7 @@ module FSM(clk, reset, coin, drink_choose, change, total_coin);
                     $display("tea\n");
                     
                 // 選擇drink or 繼續投錢
-                if (coin != 0) begin
+                if (coin == 0) begin
                     drink_pass <= drink_choose;
                     next_state = S2; // 給飲料
                 end  // if end
