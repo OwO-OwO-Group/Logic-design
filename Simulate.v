@@ -31,7 +31,6 @@ module Simulate();
       if (change !== 0) $display("no change");
       if (total_coin !== 0) $display("total_coin must be 0");
 
-
       $display("test1");
       #10 coin = 10; // coin 10, total 10 dollars tea
       #10 coin = 5; // coin 5, total 15 dollars tea | coke
@@ -42,8 +41,19 @@ module Simulate();
       #10 drink_choose = coffee; // 3 = coffee
       //coffee out
       #10 drink_choose = 0; // exchange 6 dollars
+        
+      #10 $display("cancel test");
+      #10 coin = 10; // coin 10, total 10 dollars tea
+      #10 coin = 5; // coin 5, total 15 dollars tea | coke
+      #10 coin = 1; // coin 1, total 16 dollars tea | coke
+      #10 coin = 10; // coin 10, total 26 dollars tea | coke | coffee | milk
+      #10
+      coin = 0;
+      cancel = 1; // exchange 26 dollars
 
-      $display("finish");
+      #10 cancel = 0;
+
+      #10 $display("finish");
       $finish;
     end
 endmodule

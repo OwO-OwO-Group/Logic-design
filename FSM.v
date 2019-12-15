@@ -40,7 +40,9 @@ module FSM(clk, reset, coin, drink_choose, change, total_coin, cancel);
                 if (clk == 0)
                     total_coin = total_coin + coin; // 投錢
                 $display("money : %d", total_coin); // 顯示目前金額
-                if (total_coin >= 10) // 高於最低金額
+                if (cancel == 1)
+                  state <= S3;
+                else if (total_coin >= 10) // 高於最低金額
                     state <= S1;  // 進入S1
                 else                  // 金額不足
                     state <= S0;  // 繼續投錢
@@ -65,6 +67,37 @@ module FSM(clk, reset, coin, drink_choose, change, total_coin, cancel);
                 else // 繼續投錢
                     state <= S0;
             end // S1 end
+
+            S2: begin
+              case (drink_pass)
+                tea: begin
+                  $display("tea out");
+                  total_coin = total_coin - 10;
+                end
+
+                coke: begin
+                  $display("coke out");
+                  total_coin = total_coin - 15;
+                end
+
+                coffee: begin
+                  $display("coffee out");
+                  total_coin = total_coin - 20;
+                end
+
+                milk: begin
+                  $display("milk out");
+                  total_coin = total_coin - 25;
+                end
+              endcase
+              state <= S3;
+            end
+
+            S3: begin
+              $display("exchange %d dollars", total_coin);
+              total_coin <= 0;
+              state <= S0;
+            end
         endcase
     
 endmodule
