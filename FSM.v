@@ -45,14 +45,14 @@ module FSM(clk, reset, coin, drink_choose, change, total_coin);
             S1: begin
                 $display("money : %d\n", total_coin); // 顯示目前金額
                 // 顯示目前能買那些    
-                if (total_coin >= 10)
-                    $display("tea\n");
-                else if (total_coin >= 15)
-                    $display("tea, coke\n");
+                if (total_coin >= 25)
+                    $display("tea, coke, coffee, milk\n");
                 else if (total_coin >= 20)
                     $display("tea, coke, coffee\n");
-                else if (total_coin >= 25)
-                    $display("tea, coke, coffee, milk\n");
+                else if (total_coin >= 15)
+                    $display("tea, coke\n");
+                else if (total_coin >= 10)
+                    $display("tea\n");
                     
                 // 選擇drink or 繼續投錢
                 if (coin != 0) begin
