@@ -6,7 +6,7 @@ module FSM(clk, reset, coin, drink_choose, change, total_coin);
     input clk, reset;
     input [31:0] coin;
     input [1:0] drink_choose;
-    output change, total_coin;
+    output [31:0] change, total_coin;
     
     reg [31:0] total_coin, change;
     reg [1:0] curr_state, next_state;
