@@ -64,7 +64,18 @@ module FSM(clk, reset, coin, drink_choose, change, total_coin, cancel);
                 // 選擇drink or 繼續投錢
                 if (coin == 0 && drink_choose != no_choose) begin
                     drink_pass <= drink_choose;
-                    state <= S2; // 給飲料
+
+
+                    if ((drink_pass == tea && total_coin >= 10) ||
+                        (drink_pass == coke && total_coin >= 15) ||
+                        (drink_pass == coffee && total_coin >= 20) ||
+                        (drink_pass == milk && total_coin >= 25)
+                      )
+                      state <= S2; // 給飲料
+                    else begin
+                      state <= S0;
+                      $display("not enough\n");
+                    end
                 end  // if end
                 else // 繼續投錢
                     state <= S0;
@@ -72,46 +83,28 @@ module FSM(clk, reset, coin, drink_choose, change, total_coin, cancel);
 
             S2: begin
               case (drink_pass)
-			    
                 tea: begin
-				  if (total_coin >= 10) begin
-                    $display("tea out");
-                    total_coin = total_coin - 10;
-			      end // if end
-				  
-				  else $display("not enough\n");
+                  $display("tea out");
+                  total_coin = total_coin - 10;
                 end
 
                 coke: begin
-				  if (total_coin >= 15) begin
-                    $display("coke out");
-                    total_coin = total_coin - 15;
-				  end // if end
-				  
-				  else $display("not enough\n");
+                  $display("coke out");
+                  total_coin = total_coin - 15;
                 end
 
                 coffee: begin
-				  if (total_coin >= 20) begin
-                      $display("coffee out");
-                      total_coin = total_coin - 20;
-				  end // if end
-				  
-				  else $display("not enough\n");
+                  $display("coffee out");
+                  total_coin = total_coin - 20;
                 end
 
                 milk: begin
-				  if (total_coin >= 25) begin
-                      $display("milk out");
-                      total_coin = total_coin - 25;
-				  end // if end
-				  
-				  else $display("not enough\n");
+                  $display("milk out");
+                  total_coin = total_coin - 25;
                 end
               endcase
-			  
               state <= S3;
-            end // S2 end
+            end
 
             S3: begin
               $display("exchange %d dollars", total_coin);
