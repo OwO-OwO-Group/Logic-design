@@ -37,9 +37,11 @@ module FSM(clk, reset, coin, drink_choose, change, total_coin, cancel);
     always @(clk or coin or drink_choose)
         case (state)
             S0: begin
-                if (clk == 0)
+                if (clk == 0) begin
                     total_coin = total_coin + coin; // 投錢
-                $display("money : %d", total_coin); // 顯示目前金額
+                  $display("coin %d", total_coin); // 顯示目前金額
+                end
+
                 if (cancel == 1)
                   state <= S3;
                 else if (total_coin >= 10) // 高於最低金額
@@ -51,11 +53,11 @@ module FSM(clk, reset, coin, drink_choose, change, total_coin, cancel);
             S1: begin
                 // 顯示目前能買那些    
                 if (total_coin >= 25)
-                    $display("tea, coke, coffee, milk");
+                    $display("tea | coke | coffee | milk");
                 else if (total_coin >= 20)
-                    $display("tea, coke, coffee");
+                    $display("tea | coke | coffee");
                 else if (total_coin >= 15)
-                    $display("tea, coke");
+                    $display("tea | coke");
                 else if (total_coin >= 10)
                     $display("tea");
                     
@@ -70,28 +72,46 @@ module FSM(clk, reset, coin, drink_choose, change, total_coin, cancel);
 
             S2: begin
               case (drink_pass)
+			    
                 tea: begin
-                  $display("tea out");
-                  total_coin = total_coin - 10;
+				  if (total_coin >= 10) begin
+                    $display("tea out");
+                    total_coin = total_coin - 10;
+			      end // if end
+				  
+				  else $display("not enough\n");
                 end
 
                 coke: begin
-                  $display("coke out");
-                  total_coin = total_coin - 15;
+				  if (total_coin >= 15) begin
+                    $display("coke out");
+                    total_coin = total_coin - 15;
+				  end // if end
+				  
+				  else $display("not enough\n");
                 end
 
                 coffee: begin
-                  $display("coffee out");
-                  total_coin = total_coin - 20;
+				  if (total_coin >= 20) begin
+                      $display("coffee out");
+                      total_coin = total_coin - 20;
+				  end // if end
+				  
+				  else $display("not enough\n");
                 end
 
                 milk: begin
-                  $display("milk out");
-                  total_coin = total_coin - 25;
+				  if (total_coin >= 25) begin
+                      $display("milk out");
+                      total_coin = total_coin - 25;
+				  end // if end
+				  
+				  else $display("not enough\n");
                 end
               endcase
+			  
               state <= S3;
-            end
+            end // S2 end
 
             S3: begin
               $display("exchange %d dollars", total_coin);
