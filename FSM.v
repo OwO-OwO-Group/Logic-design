@@ -72,28 +72,46 @@ module FSM(clk, reset, coin, drink_choose, change, total_coin, cancel);
 
             S2: begin
               case (drink_pass)
+			    
                 tea: begin
-                  $display("tea out");
-                  total_coin = total_coin - 10;
+				  if (total_coin >= 10) begin
+                    $display("tea out");
+                    total_coin = total_coin - 10;
+			      end // if end
+				  
+				  else $display("not enough\n");
                 end
 
                 coke: begin
-                  $display("coke out");
-                  total_coin = total_coin - 15;
+				  if (total_coin >= 15) begin
+                    $display("coke out");
+                    total_coin = total_coin - 15;
+				  end // if end
+				  
+				  else $display("not enough\n");
                 end
 
                 coffee: begin
-                  $display("coffee out");
-                  total_coin = total_coin - 20;
+				  if (total_coin >= 20) begin
+                      $display("coffee out");
+                      total_coin = total_coin - 20;
+				  end // if end
+				  
+				  else $display("not enough\n");
                 end
 
                 milk: begin
-                  $display("milk out");
-                  total_coin = total_coin - 25;
+				  if (total_coin >= 25) begin
+                      $display("milk out");
+                      total_coin = total_coin - 25;
+				  end // if end
+				  
+				  else $display("not enough\n");
                 end
               endcase
+			  
               state <= S3;
-            end
+            end // S2 end
 
             S3: begin
               $display("exchange %d dollars", total_coin);
