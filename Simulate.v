@@ -41,8 +41,8 @@ module Simulate();
       #10 drink_choose = coffee; // 3 = coffee
       //coffee out
       #10 drink_choose = 0; // exchange 6 dollars
-        
-      #10 $display("cancel test");
+
+      #10 $display("cancel test s0");
       #10 coin = 10; // coin 10, total 10 dollars tea
       #10 coin = 5; // coin 5, total 15 dollars tea | coke
       #10 coin = 1; // coin 1, total 16 dollars tea | coke
@@ -51,6 +51,26 @@ module Simulate();
       coin = 0;
       cancel = 1; // exchange 26 dollars
 
+      #20 $display("cancel test s1");
+      cancel = 0;
+      #10 coin = 10; // coin 10, total 10 dollars tea
+      #10 coin = 0;
+      #5  cancel = 1; // exchange 10 dollars
+      #5  cancel = 0;
+
+      #10
+      $display("put some money");
+      cancel = 0;
+      #10 coin = 10; // coin 10
+      #10 coin = 10; // coin 20
+      #10 coin = 0; // coin 20
+      #10 coin = 10; // coin 30
+
+      #10 coin = 0;
+      #10 drink_choose = tea; // 1 = tea
+
+      // tea out
+      #10 drink_choose = 0; // exchange 30 - 10 = 20 dollars
       #10 cancel = 0;
 
       #10 $display("finish");
